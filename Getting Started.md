@@ -29,16 +29,25 @@ select * from table_name;
 **Using [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) software:**
 
 Open up MySQL Workbench and in the top menu click `database` > `connect to database`.
+
 You should see a window asking for you for information to setup a new connection. Edit the following:
 
 Connection Method: `Standard TCP/IP over SSH`
+
 SSH Hostname: `login.encs.concordia.ca`
+
 SSH Username: `your encs username`
+
 SSH Password: click `Store In Vault ...` and enter `your encs password`
+
 MYSQL Hostname: `upc353.encsconcordia.ca`
+
 MYSQL Server Port: `3306`
+
 Username: `our groups username`
+
 Password: `our groups password`
+
 Default Schema: `our groups username`
 
 
