@@ -5,7 +5,7 @@ hljs.initHighlightingOnLoad();
 $(document).ready(() => {
     try {
         axios.get(App.root_dir+'/api/example.php').then(res => {
-            if (res.data) {
+            if (res.data && res.data.status == 200) {
                 var response = res.data;
                 $('#output').html(JSON.stringify(response, null, 2));
             }

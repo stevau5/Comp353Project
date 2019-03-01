@@ -16,6 +16,7 @@ class WebService
         $url = $_SERVER['REQUEST_URI'];
         $params = [];
         $body = [];
+        
         if($method == 'GET')
             $params = $_GET;
         else if($method == 'POST')
