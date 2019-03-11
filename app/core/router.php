@@ -18,7 +18,10 @@ class Router
         if(file_exists(__DIR__.'/../views/' . $url[0] . '.php'))
             $this->view($url[0], $url[1]);
         else
+        {
+            http_response_code(404);
             $this->view('404', $url[1]);
+        }
     }
 
     private function parseUrl()

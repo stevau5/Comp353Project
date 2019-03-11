@@ -2,6 +2,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
 
+<link rel="icon" type="image/png" href="./favicon.ico" />
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" />
 <link rel="stylesheet" href="./public/css/lib/bootstrap/bootstrap.min.css" />
 <link rel="stylesheet" href="./public/css/lib/fontawesome-free-5.7.0/css/all.min.css" />
