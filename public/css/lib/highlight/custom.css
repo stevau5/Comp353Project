@@ -69,3 +69,5 @@
 .hljs-strong {
   font-weight: bold;
 }
+
+.hljs-unhighlight * { color: #c5c8c6; }
