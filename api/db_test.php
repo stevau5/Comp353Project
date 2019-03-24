@@ -13,21 +13,25 @@ class WSDBTest extends WebService
 
     private function query($query)
     {
-        try {
-            $db = (new DB)->connect();
-            $rows = [];
-            $stmt = $db->prepare($query);
-            if($stmt->execute())
-            {
-                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $this->answer($rows);
+        if(strcasecmp(substr($query, 0, strlen('DROP')), 'DROP') == 0)
+            $this->answer('DO NOT DROP!', false, 400);
+        else {
+            try {
+                $db = (new DB)->connect();
+                $rows = [];
+                $stmt = $db->prepare($query);
+                if($stmt->execute())
+                {
+                    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $this->answer($rows);
+                }
+                else
+                    $this->answer('Something went wrong...', false);
             }
-            else
-                $this->answer('Something went wrong..', false);
-        }
-        catch(Exception $e)
-        {
-            $this->answer(implode($e->errorInfo, " "), false);
+            catch(Exception $e)
+            {
+                $this->answer(implode($e->errorInfo, " "), false);
+            }
         }
     }
 }
