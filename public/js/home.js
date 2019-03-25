@@ -32,8 +32,11 @@ $(document).ready(() => {
                 var table_html = App.arrayToTable(res.data.data, {'table':'table mb-0', 'thead':'thead-dark', 'tr td, tr th':'text-center'}, formatCell);
                 $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html(table_html);
             }
+            else if(res.data && res.data.status != 200)
+                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html('<strong>Error: </strong> ' + res.data.msg);
         }).catch(error => {
             console.log(error);
+            $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html('<strong>Error: </strong> There was a problem with the api request');
         });
     }
 });
