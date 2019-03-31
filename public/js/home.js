@@ -16,32 +16,39 @@ function formatCell(k, v) {
     }
     else if(k.indexOf('price') !== -1 && isNaN(v) === false)
         return '$'+parseFloat(v).toFixed(2);
+}
 
+function strip_HTML_tags(str) {
+    var div = document.createElement("div");
+    div.innerHTML = str;
+    return div.textContent || div.innerText || "";
 }
 
 function process_query(index) {
     var query = index >= 0 ? queries[index] : $('#div-user-query pre code').html();
-    axios.post(App.root_dir+'/api/db_test.php?p=query', { 'query': query }).then(res => {
+    axios.post(App.root_dir+'/api/db_test.php?p=query', { 'query': strip_HTML_tags(query) }).then(res => {
         $div_results = index >= 0 ? $('#div-queries .results:nth-of-type(' + (Number(index)+1) + ')') : $('#div-user-query .results');
         $div_results.html('<div class="text-center p-2"><div class="spinner-border text-dark"></div></div>');
 
-        if (res.data && res.data.status == 200) {
-            var result;
-            if(res.data.data.results) {
-                var table_html = App.arrayToTable(res.data.data.results, {'table':'table mb-0', 'thead':'thead-dark', 'tr td, tr th':''}, formatCell);
-                var $tbody = $(table_html).find('tbody');
-                if($tbody.children().length == 0)
-                    $tbody.append('<tr><td class="text-center"> no results... </td></tr>');
+        if(res.data) {
+            if (res.data.status == 200) {
+                var result;
+                if(res.data.data.results) {
+                    var table_html = App.arrayToTable(res.data.data.results, {'table':'table mb-0', 'thead':'thead-dark', 'tr td, tr th':''}, formatCell);
+                    var $tbody = $(table_html).find('tbody');
+                    if($tbody.children().length == 0)
+                        $tbody.append('<tr><td class="text-center"> no results... </td></tr>');
 
-                result = table_html;
+                    result = table_html;
+                }
+                else if(res.data && res.data.status == 200 && res.data.data.msg)
+                    result = '<div class="alert alert-success mb-0"><strong>Message: </strong> '+res.data.data.msg+'</div>';
+
+                $div_results.hide().html(result).fadeIn(1000);
             }
-            else if(res.data.data.msg)
-                result = '<div class="alert alert-success mb-0"><strong>Message: </strong> '+res.data.data.msg+'</div>';
-
-            $div_results.hide().html(result).fadeIn(1000);
+            else if(res.data.status != 200)
+                $div_results.hide().html('<div class="alert alert-danger mb-0"><strong>Error: </strong> '+res.data.msg+'</div>').fadeIn(1000);
         }
-        else if(res.data && res.data.status != 200)
-            $div_results.hide().html('<strong>Error: </strong> ' + res.data.msg).fadeIn(1000);
     }).catch(error => {
         $div_results = index >= 0 ? $('#div-queries .results:nth-of-type(' + (Number(index)+1) + ')') : $('#div-user-query .results');
         var msg = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : 'There was a problem with the api request.';
@@ -53,6 +60,9 @@ function process_query(index) {
 
 $(document).ready(() => {
     $('#btn-execute-query').click(()=> {
+        var div_code = document.querySelector('#div-user-query pre code');
+        if(str = strip_HTML_tags(div_code.innerHTML))
+            document.querySelector('#div-user-query pre code').innerHTML = str;
         hljs.highlightBlock(document.querySelector('#div-user-query pre code'));
         process_query(-1);
     });
