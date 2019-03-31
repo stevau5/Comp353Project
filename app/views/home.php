@@ -14,7 +14,7 @@
                 <h1><i class="fas fa-database"></i> DB Test</h1>
                 <div id="div-user-query">
                     <div class="position-relative">
-                        <pre><code contenteditable="true" class="sql">insert into departments values(17,'testing', 109876765, '1975-05-08');</code></pre>
+                        <pre><code contenteditable="true" class="sql"></code></pre>
                         <button id="btn-execute-query" class="btn btn-primary button text-uppercase">Run</button>
                     </div>
                     <div class="results table-responsive shadow"></div>
