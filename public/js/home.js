@@ -5,7 +5,7 @@ hljs.initHighlightingOnLoad();
 $(document).ready(() => {
     // list of queries
     var queries = [
-        'select * from <span class="hljs-unhighlight">users</span>;'
+        'select * from employees;'
     ];
 
     var formatCell = (k, v) => {
@@ -33,13 +33,14 @@ $(document).ready(() => {
                 var $tbody = $(table_html).find('tbody');
                 if($tbody.children().length == 0)
                     $tbody.append('<tr><td class="text-center"> no results... </td></tr>')
-                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html(table_html);
+                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html(table_html).fadeIn(1000);
             }
             else if(res.data && res.data.status != 200)
                 $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html('<strong>Error: </strong> ' + res.data.msg).fadeIn(1000);
         }).catch(error => {
             console.log(error);
-            $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html('<div class="alert alert-danger mb-0"><strong>Error: </strong> There was a problem with the api request</div>');
+            var msg = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : 'There was a problem with the api request.';
+            $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html('<div class="alert alert-danger mb-0"><strong>Error: </strong> '+msg+'</div>').fadeIn(1000);
         });
     }
 });
