@@ -1,11 +1,12 @@
 .hljs {
     display: block;
-    background: #282B2E;
-    padding: 5px;
-    padding-left: 15px;
-    border-radius: 7px;
+    overflow-x: auto;
+    background: #333;
+    padding: 5px 10px;
+    border-radius: 4px;
     border: 3px solid #bbb;
-    font-size: 15px;
+    font-size: 14px;
+    color: #E0E2E4;
 }
 
 .hljs-keyword,
@@ -23,10 +24,6 @@
 
 .hljs-number {
     color: #FFCD22;
-}
-
-.hljs {
-    color: #E0E2E4;
 }
 
 .css .hljs-tag,
@@ -152,3 +149,5 @@
 .xml .hljs-cdata {
     opacity: 0.5;
 }
+
+.hljs-unhighlight * { color: #c5c8c6; }

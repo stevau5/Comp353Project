@@ -13,7 +13,8 @@ class WSDBTest extends WebService
 
     private function query($query)
     {
-        if(strcasecmp(substr($query, 0, strlen('DROP')), 'DROP') == 0)
+        $query = trim($query);
+        if(stripos($query, 'DROP') !== false)
             $this->answer('DO NOT DROP!', false, 400);
         else {
             try {
@@ -22,15 +23,20 @@ class WSDBTest extends WebService
                 $stmt = $db->prepare($query);
                 if($stmt->execute())
                 {
-                    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    $this->answer($rows);
+                    if(stripos($query, 'SELECT') !== false)
+                    {
+                        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $this->answer((object) ['results' => $rows]);
+                    }
+                    else
+                        $this->answer((object) ['msg' => 'Success!']);
                 }
                 else
                     $this->answer('Something went wrong...', false);
             }
             catch(Exception $e)
             {
-                $this->answer(implode($e->errorInfo, " "), false);
+                $this->answer(implode($e->errorInfo, " : "), false);
             }
         }
     }
