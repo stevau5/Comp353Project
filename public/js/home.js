@@ -22,7 +22,7 @@ $(document).ready(() => {
     for(var k in queries) {
         $('#div-queries').append(
             '<pre><code class="sql">' + Number(k+1) + '. ' + queries[k] + '</code></pre>' +
-            '<div class="results table-responsive shadow"></div>' +
+            '<div class="results table-responsive shadow"><div class="text-center p-2"><div class="spinner-border text-dark"></div></div></div>' +
             '<br />'
         );
         hljs.highlightBlock($('#div-queries pre:nth-of-type(' + Number(k+1) + ') code')[0]);
@@ -30,13 +30,13 @@ $(document).ready(() => {
         axios.post(App.root_dir+'/api/db_test.php?p=query', { 'query': queries[k] }).then(res => {
             if (res.data && res.data.status == 200) {
                 var table_html = App.arrayToTable(res.data.data, {'table':'table mb-0', 'thead':'thead-dark', 'tr td, tr th':'text-center'}, formatCell);
-                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html(table_html);
+                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html(table_html).fadeIn(1000);
             }
             else if(res.data && res.data.status != 200)
-                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html('<strong>Error: </strong> ' + res.data.msg);
+                $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html('<strong>Error: </strong> ' + res.data.msg).fadeIn(1000);
         }).catch(error => {
             console.log(error);
-            $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').html('<strong>Error: </strong> There was a problem with the api request');
+            $('#div-queries .results:nth-of-type(' + Number(k+1) + ')').hide().html('<strong>Error: </strong> There was a problem with the api request').fadeIn(1000);
         });
     }
 });
