@@ -14,7 +14,8 @@ class WSDBTest extends WebService
     private function query($query)
     {
         $query = trim($query);
-        if(stripos($query, 'DROP') !== false)
+        $drop_index = stripos($query, 'DROP');
+        if($drop_index !== false && $drop_index == 0)
             $this->answer('DO NOT DROP!', false, 400);
         else {
             try {

@@ -4,18 +4,33 @@ hljs.initHighlightingOnLoad();
 
 // list of predefined queries
 var queries = [
+    '/*Get detail of all books in the Bookstore.*/\nselect isbn, title, qoh, qty_sold, edition, price, authors, name, publishers.name from books, publishers \nwhere publisher_id = publishers.id;',
+    '/*Get detail of all books that are back order.*/\nselect * from books, (select isbn from book_orders) as back_orders where books.isbn = back_orders.isbn;',
+    '/*Get detail of all the special orders for a given customer.*/\nselect concat(customer_id, date_created) as confirmation_number,customer_id, date_created from customer_requests where customer_id = 12;',
+    '/*Get detail of all purchases made by a given customer.*/\nselect employee_id, books.title, sales.isbn, sale_date, sales.price, quantity FROM sales, books \nwhere customer_id =14 and sales.isbn = books.isbn;',
+    '/*Get detail of all the sales made by a given employee on a specific date.*/\nSELECT * FROM sales where employee_id = 4 and sale_date like "2019-03-18%";',
+    '/*Get details of all purchases made.*/\nselect price, sale_date, sales.isbn, employee_id, quantity, customers.user_id as customer_id from sales,customers \nwhere sales.customer_id = customers.user_id;',
+    '/**/\nSelect sum(sales.price) as price_sum, query1.customer_id from sales, \n(select customer_requests.customer_id as customer_id, isbn from customer_requests, book_customer_requests \nwhere book_customer_requests.customer_id = customer_requests.customer_id  and customer_requests.date_created like "2019%") as query1 \nwhere query1.isbn = sales.isbn and query1.customer_id = sales.customer_id group by query1.customer_id;',
+    '/*List every book ordered but not received within the period set has passed.*/\nselect books.title, book_orders.order_id from book_orders, books,shipments,orders \nwhere books.isbn = book_orders.isbn and shipments.order_id = orders.id and book_orders.order_id = orders.id and DATEDIFF(SUBSTRING(shipments.shipment_date, 1, 11),SUBSTRING(order_date, 1, 11)) > 14 ;',
+    'select * from users;',
+    'select * from customers;',
     'select * from employees;',
-    'select * from departments;'
+    'select * from sales;',
+    'select * from books;',
+    'select * from orders;',
+    'select * from branches;',
+    'select * from shipments;',
+    'select * from publishers;',
+    'select * from customer_requests;',
+    'select * from book_orders;',
+    'select * from book_customer_requests;'
 ];
 
 function formatCell(k, v) {
-    if(k == 'gender') {
-        if(v == 'm') return '<i class="fas fa-mars"></i>';
-        else if (v == 'f') return '<i class="fas fa-venus"></i>';
-        else return '<i class="fas fa-genderless"></i>';
-    }
-    else if(k.indexOf('price') !== -1 && isNaN(v) === false)
+    if(k.indexOf('price') !== -1 && isNaN(v) === false)
         return '$'+parseFloat(v).toFixed(2);
+    else if(k.indexOf('password') !== -1)
+        return 'hidden';
 }
 
 function strip_HTML_tags(str) {
